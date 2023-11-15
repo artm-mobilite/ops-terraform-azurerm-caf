@@ -277,6 +277,7 @@ module "route_tables" {
 
 output "route_tables" {
   value = module.route_tables
+}
 
 resource "azurecaf_name" "routes" {
   for_each = local.networking.azurerm_routes
