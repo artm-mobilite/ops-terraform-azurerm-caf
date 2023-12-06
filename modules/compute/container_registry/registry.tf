@@ -16,15 +16,15 @@ resource "azurerm_container_registry" "acr" {
   admin_enabled                 = var.admin_enabled
   tags                          = local.tags
   public_network_access_enabled = var.public_network_access_enabled
-  quarantine_policy_enabled     = var.quarantine_policy_enabled
-  zone_redundancy_enabled       = var.zone_redundancy_enabled
-  export_policy_enabled         = var.export_policy_enabled
-  anonymous_pull_enabled        = var.anonymous_pull_enabled
-  data_endpoint_enabled         = var.data_endpoint_enabled
-  network_rule_bypass_option    = var.network_rule_bypass_option
+  quarantine_policy_enabled     = try(var.settings.quarantine_policy_enabled, null)
+  zone_redundancy_enabled       = try(var.settings.zone_redundancy_enabled, false)
+  export_policy_enabled         = try(var.settings.export_policy_enabled, true)
+  anonymous_pull_enabled        = try(var.settings.anonymous_pull_enabled, null)
+  data_endpoint_enabled         = try(var.settings.data_endpoint_enabled, null)
+  network_rule_bypass_option    = try(var.settings.network_rule_bypass_option, "AzureServices")
 
   dynamic "trust_policy" {
-    for_each = try(var.trust_policy, {})
+    for_each = try(var.settings.trust_policy, {})
 
     content {
       enabled = try(trust_policy.value.enabled, false)
@@ -32,7 +32,7 @@ resource "azurerm_container_registry" "acr" {
   }
 
   dynamic "retention_policy" {
-    for_each = try(var.retention_policy, {})
+    for_each = try(var.settings.retention_policy, {})
 
     content {
       days    = try(retention_policy.value.days, 7)
@@ -41,7 +41,7 @@ resource "azurerm_container_registry" "acr" {
   }
 
   dynamic "identity" {
-    for_each = can(var.identity) ? [var.identity] : []
+    for_each = can(var.settings.identity) ? [var.settings.identity] : []
 
     content {
       type         = var.identity.type
@@ -50,11 +50,11 @@ resource "azurerm_container_registry" "acr" {
   }
 
   dynamic "encryption" {
-    for_each = try(var.encryption, {})
+    for_each = try(var.settings.encryption, {})
 
     content {
       enabled            = try(encryption.value.enabled, false)
-      key_vault_key_id   = try(encryption.value.key_vault_key_id, var.keyvaults[try(encryption.value.keyvault.lz_key, var.client_config.landingzone_key)][encryption.value.keyvault.key].id)
+      key_vault_key_id   = try(encryption.value.key_vault_key_id, var.keyvault_keys[try(encryption.value.keyvault.lz_key, var.client_config.landingzone_key)][encryption.value.keyvault.key].id)
       identity_client_id = try(encryption.value.identity_client_id, var.managed_identities[try(encryption.value.identity.lz_key, var.client_config.landingzone_key)][encryption.value.identity.key].client_id)
     }
   }

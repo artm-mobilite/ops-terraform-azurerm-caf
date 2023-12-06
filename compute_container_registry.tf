@@ -17,7 +17,7 @@ module "container_registry" {
   private_dns         = local.combined_objects_private_dns
   resource_groups     = local.combined_objects_resource_groups
   managed_identities  = local.combined_objects_managed_identities
-  keyvaults           = local.combined_objects_keyvaults
+  keyvault_keys       = local.combined_objects_keyvault_keys
   settings            = each.value
 
   public_network_access_enabled = try(each.value.public_network_access_enabled, "true")
