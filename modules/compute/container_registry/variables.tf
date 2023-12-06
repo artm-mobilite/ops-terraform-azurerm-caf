@@ -59,10 +59,64 @@ variable "resource_groups" {
 variable "private_dns" {
   default = {}
 }
+variable "managed_identities" {
+  default = {}
+}
+variable "keyvaults" {
+  default = {}
+}
 
 variable "public_network_access_enabled" {
-  default = "true"
+  default     = "true"
+  description = "(Optional) Whether public network access is allowed for the container registry."
 }
+variable "quarantine_policy_enabled" {
+  default     = null
+  nullable    = true
+  description = "(Optional) Boolean value that indicates whether quarantine policy is enabled."
+}
+variable "zone_redundancy_enabled" {
+  default     = false
+  description = "(Optional) Whether zone redundancy is enabled for this Container Registry?"
+}
+variable "export_policy_enabled" {
+  default     = true
+  description = "(Optional) Boolean value that indicates whether export policy is enabled."
+}
+variable "anonymous_pull_enabled" {
+  default     = null
+  nullable    = true
+  description = "(Optional) Whether allows anonymous (unauthenticated) pull access to this Container Registry?"
+}
+variable "data_endpoint_enabled" {
+  default     = null
+  nullable    = true
+  description = "(Optional) Whether to enable dedicated data endpoints for this Container Registry?"
+}
+variable "network_rule_bypass_option" {
+  default     = "AzureServices"
+  description = " (Optional) Whether to allow trusted Azure services to access a network restricted Container Registry?"
+}
+variable "trust_policy" {
+  description = "(Optional) A trust_policy block as documented https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_registry#trust_policy"
+  default     = {}
+}
+
+variable "retention_policy" {
+  description = "(Optional) A retention_policy block as documented https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_registry#retention_policy"
+  default     = {}
+}
+
+variable "identity" {
+  description = "(Optional) An identity block as defined https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_registry#identity"
+  default     = {}
+}
+
+variable "encryption" {
+  description = "(Optional) An encryption block as documented https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_registry#encryption"
+  default     = {}
+}
+
 variable "location" {
   description = "location of the resource if different from the resource group."
   default     = null
