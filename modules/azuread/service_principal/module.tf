@@ -1,6 +1,6 @@
 
 resource "azuread_service_principal" "app" {
-  client_id                     = var.application_id
+  application_id                = var.application_id
   app_role_assignment_required  = try(var.settings.app_role_assignment_required, false)
   tags                          = try(var.settings.tags, null)
   account_enabled               = try(var.settings.account_enabled, null)
