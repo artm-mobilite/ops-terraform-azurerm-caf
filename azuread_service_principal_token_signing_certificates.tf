@@ -1,5 +1,5 @@
 module "azuread_service_principal_token_signing_certificates" {
-  source     = "./modules/azuread/azuread_service_principal_token_signing_certificates"
+  source     = "./modules/azuread/service_principal_token_signing_certificate"
   for_each   = local.azuread.azuread_service_principal_token_signing_certificates
 
   settings        = each.value
