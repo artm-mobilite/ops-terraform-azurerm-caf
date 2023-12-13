@@ -11,3 +11,9 @@ output "client_config" {
 output "global_settings" {
   value = local.global_settings
 }
+
+output "combined_objects" {
+  value = {
+    combined_objects_route_tables = local.combined_objects_route_tables
+  }
+}
