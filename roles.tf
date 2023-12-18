@@ -234,6 +234,10 @@ locals {
   }
 }
 
+output "roles_to_process" {
+  value = local.services_roles
+}
+
 # The code transform this input format to
 #   custom_role_mapping = {
 #     subscription_keys = {
