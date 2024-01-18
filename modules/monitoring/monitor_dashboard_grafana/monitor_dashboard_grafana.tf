@@ -20,4 +20,10 @@ resource "azurerm_dashboard_grafana" "dashboard" {
   }
 
   tags = local.tags
+
+  lifecycle {
+    ignore_changes = [
+      azure_monitor_workspace_integrations,
+    ]
+  }
 }
