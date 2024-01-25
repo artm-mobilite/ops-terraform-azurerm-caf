@@ -33,6 +33,7 @@ module "private_endpoints" {
     storage_accounts           = local.combined_objects_storage_accounts
     synapse_workspaces         = local.combined_objects_synapse_workspaces
     signalr_services           = local.combined_objects_signalr_services
+    static_sites               = local.combined_objects_static_sites
   }
 
 }
