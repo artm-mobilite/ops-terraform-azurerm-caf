@@ -221,14 +221,14 @@ locals {
                     mode                    = key_mode                  #   "mode" = "built_in_role_mapping"
                     scope_resource_key      = key
                     scope_lz_key            = try(role_mapping.lz_key, null)
-                    scope_key_resource      = scope_key_resource
+                    scope_key_resource      = try(role_mapping.key, scope_key_resource)
                     role_definition_name    = role_definition_name
                     object_id_resource_type = object_id_key
                     object_id_key_resource  = object_id_key_resource #   "object_id_key_resource" = "aks_admins"
                     object_id_lz_key        = try(object_resources.lz_key, null)
                   }
                 ]
-              ] if role_definition_name != "lz_key"
+              ] if role_definition_name != "lz_key" || role_definition_name != "key"
             ]
           ]
         ]
