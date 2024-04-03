@@ -221,6 +221,7 @@ locals {
                     mode                    = key_mode                  #   "mode" = "built_in_role_mapping"
                     scope_resource_key      = key
                     scope_lz_key            = try(role_mapping.lz_key, null)
+                    scope_key_resource_orig = scope_key_resource
                     scope_key_resource      = try(role_mapping.key, scope_key_resource)
                     role_definition_name    = role_definition_name
                     object_id_resource_type = object_id_key
@@ -233,7 +234,7 @@ locals {
           ]
         ]
       ]
-    ) : format("%s_%s_%s_%s", mapping.object_id_resource_type, mapping.scope_key_resource, replace(mapping.role_definition_name, " ", "_"), mapping.object_id_key_resource) => mapping
+    ) : format("%s_%s_%s_%s", mapping.object_id_resource_type, mapping.scope_key_resource_orig, replace(mapping.role_definition_name, " ", "_"), mapping.object_id_key_resource) => mapping
   }
 }
 
