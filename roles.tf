@@ -228,7 +228,7 @@ locals {
                     object_id_lz_key        = try(object_resources.lz_key, null)
                   }
                 ]
-              ] if role_definition_name != "lz_key" || role_definition_name != "key"
+              ] if !contains(["lz_key", "key"], role_definition_name)
             ]
           ]
         ]
