@@ -160,7 +160,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
       utc_offset   = try(maintenance_window_auto_upgrade.value.utc_offset, null)
       start_date   = try(maintenance_window_auto_upgrade.value.start_date, null)
       dynamic "not_allowed" {
-        for_each = try(maintenance_window_auto_upgrade.not_allowed[*], {})
+        for_each = try(maintenance_window_auto_upgrade.value.not_allowed[*], {})
         content {
           end   = try(not_allowed.value.end, null)
           start = try(not_allowed.value.start, null)
@@ -182,7 +182,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
       utc_offset   = try(maintenance_window_auto_upgrade.value.utc_offset, null)
       start_date   = try(maintenance_window_auto_upgrade.value.start_date, null)
       dynamic "not_allowed" {
-        for_each = try(maintenance_window_auto_upgrade.not_allowed[*], {})
+        for_each = try(maintenance_window_auto_upgrade.value.not_allowed[*], {})
         content {
           end   = try(not_allowed.value.end, null)
           start = try(not_allowed.value.start, null)
