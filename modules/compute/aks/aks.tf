@@ -147,8 +147,49 @@ resource "azurerm_kubernetes_cluster" "aks" {
   automatic_channel_upgrade = try(var.settings.automatic_channel_upgrade, null)
   node_os_channel_upgrade   = try(var.settings.node_os_channel_upgrade, null)
 
-  maintenance_window_auto_upgrade = try(var.settings.maintenance_window_auto_upgrade, null)
-  maintenance_window_node_os      = try(var.settings.maintenance_window_node_os, null)
+  dynamic "maintenance_window_node_os" {
+    for_each = try(var.settings.maintenance_window_node_os[*], {})
+    content {
+      frequency    = try(maintenance_window_auto_upgrade.value.frequency, null)
+      interval     = try(maintenance_window_auto_upgrade.value.interval, null)
+      duration     = try(maintenance_window_auto_upgrade.value.duration, null)
+      day_of_week  = try(maintenance_window_auto_upgrade.value.day_of_week, null)
+      day_of_month = try(maintenance_window_auto_upgrade.value.day_of_month, null)
+      week_index   = try(maintenance_window_auto_upgrade.value.week_index, null)
+      start_time   = try(maintenance_window_auto_upgrade.value.start_time, null)
+      utc_offset   = try(maintenance_window_auto_upgrade.value.utc_offset, null)
+      start_date   = try(maintenance_window_auto_upgrade.value.start_date, null)
+      dynamic "not_allowed" {
+        for_each = try(maintenance_window_auto_upgrade.not_allowed[*], {})
+        content {
+          end   = try(not_allowed.value.end, null)
+          start = try(not_allowed.value.start, null)
+        }
+      }
+    }
+  }
+
+  dynamic "maintenance_window_auto_upgrade" {
+    for_each = try(var.settings.maintenance_window_auto_upgrade[*], {})
+    content {
+      frequency    = try(maintenance_window_auto_upgrade.value.frequency, null)
+      interval     = try(maintenance_window_auto_upgrade.value.interval, null)
+      duration     = try(maintenance_window_auto_upgrade.value.duration, null)
+      day_of_week  = try(maintenance_window_auto_upgrade.value.day_of_week, null)
+      day_of_month = try(maintenance_window_auto_upgrade.value.day_of_month, null)
+      week_index   = try(maintenance_window_auto_upgrade.value.week_index, null)
+      start_time   = try(maintenance_window_auto_upgrade.value.start_time, null)
+      utc_offset   = try(maintenance_window_auto_upgrade.value.utc_offset, null)
+      start_date   = try(maintenance_window_auto_upgrade.value.start_date, null)
+      dynamic "not_allowed" {
+        for_each = try(maintenance_window_auto_upgrade.not_allowed[*], {})
+        content {
+          end   = try(not_allowed.value.end, null)
+          start = try(not_allowed.value.start, null)
+        }
+      }
+    }
+  }
 
   dynamic "key_management_service" {
     for_each = try(var.settings.key_management_service[*], {})
