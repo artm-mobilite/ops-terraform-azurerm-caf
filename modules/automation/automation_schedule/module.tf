@@ -16,7 +16,7 @@ resource "azurerm_automation_schedule" "automation_schedule" {
   frequency               = var.settings.frequency
   interval                = try(var.settings.interval, null)
   timezone                = try(var.settings.timezone, null)
-  start_time              = try(var.settings.start_time, null)
+  start_time              = var.settings.start_time != null ? var.settings.start_time_use_current_timestamp ? format("%sT%s", formatdate("YYYY-MM-DD", timeadd(timestamp(), "24h")), var.settings.start_time) : var.settings.start_time : null
   description             = try(var.settings.description, null)
   week_days               = try(var.settings.week_days, null)
   month_days              = try(var.settings.month_days, null)
@@ -28,5 +28,12 @@ resource "azurerm_automation_schedule" "automation_schedule" {
       day        = monthly_occurrence.day
       occurrence = monthly_occurrence.occurrence
     }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      # Ignore changes to start_time
+      start_time,
+    ]
   }
 }
