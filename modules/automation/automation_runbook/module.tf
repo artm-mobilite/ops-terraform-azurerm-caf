@@ -11,7 +11,7 @@
 # }
 
 data "local_file" "automation_runbook_file" {
-  count    = var.settings.content == null && var.settings.content_filename != null ? 1 : 0
+  count    = try(var.settings.content, null) == null && try(var.settings.content_filename, null) != null ? 1 : 0
   filename = var.settings.content_filename
 }
 
@@ -26,7 +26,7 @@ resource "azurerm_automation_runbook" "automation_runbook" {
   runbook_type            = var.settings.runbook_type
   tags                    = local.tags
 
-  content = var.settings.content != null ? var.settings.content : (var.settings.content_filename != null ? data.local_file.automation_runbook_file[0].content : null)
+  content = try(var.settings.content, null) != null ? var.settings.content : (try(var.settings.content_filename, null) != null ? data.local_file.automation_runbook_file[0].content : null)
 
   dynamic "publish_content_link" {
     for_each = try(var.settings.publish_content_link, null) == null ? [] : [1]
