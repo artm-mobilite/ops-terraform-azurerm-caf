@@ -12,7 +12,7 @@
 
 data "local_file" "automation_runbook_file" {
   count    = try(var.settings.content, null) == null && try(var.settings.content_filename, null) != null ? 1 : 0
-  filename = var.settings.content_filename
+  filename = "${path.root}/${var.settings.content_filename}"
 }
 
 resource "azurerm_automation_runbook" "automation_runbook" {
