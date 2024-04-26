@@ -29,11 +29,4 @@ resource "azurerm_automation_schedule" "automation_schedule" {
       occurrence = monthly_occurrence.occurrence
     }
   }
-
-  lifecycle {
-    ignore_changes = [
-      # Ignore changes to start_time
-      start_time,
-    ]
-  }
 }
