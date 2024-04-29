@@ -3,5 +3,5 @@ resource "azurerm_automation_job_schedule" "automation_job_schedule" {
   automation_account_name = var.automation_account_name
   schedule_name           = var.automation_account_schedule_name
   runbook_name            = var.automation_account_runbook_name
-  parameters              = try(var.automation_account_parameters, null)
+  parameters              = try(var.settings.automation_account_parameters, null)
 }

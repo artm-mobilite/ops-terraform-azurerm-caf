@@ -5,7 +5,6 @@ variable "resource_group_name" {
 variable "automation_account_name" {}
 variable "automation_account_schedule_name" {}
 variable "automation_account_runbook_name" {}
-variable "automation_account_parameters" {}
 
 variable "settings" {
   description = "Configuration object for the Automation account schedule."
