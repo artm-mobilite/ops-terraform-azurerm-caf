@@ -9,7 +9,7 @@ module "automation_job_schedules" {
   client_config                    = local.client_config
   automation_account_name          = can(each.value.automation_account_name) ? each.value.automation_account_name : local.combined_objects_automations[try(each.value.lz_key, local.client_config.landingzone_key)][each.value.automation_account_key].name
   automation_account_schedule_name = can(each.value.automation_account_schedule_name) ? each.value.automation_account_schedule_name : local.combined_objects_automation_schedules[try(each.value.lz_key, local.client_config.landingzone_key)][each.value.automation_account_schedule_key].name
-  automation_account_runbook_name  = can(each.value.automation_account_runbook_name) ? each.value.automation_account_runbook_name : local.combined_objects_automation_runbooks[try(each.value.lz_key, local.client_config.landingzone_key)][each.value.automation_account_key].name
+  automation_account_runbook_name  = can(each.value.automation_account_runbook_name) ? each.value.automation_account_runbook_name : local.combined_objects_automation_runbooks[try(each.value.lz_key, local.client_config.landingzone_key)][each.value.automation_account_runbook_key].name
 }
 
 output "automation_job_schedules" {
