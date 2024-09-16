@@ -55,6 +55,25 @@ variable "retention_in_days" {
   }
 }
 
+variable "local_authentication_disabled" {
+  description = "(Optional) Disable Non-Azure AD based Auth."
+  default     = null
+  type        = bool
+}
+
+variable "internet_ingestion_enabled" {
+  description = "(Optional) Should the Application Insights component support ingestion over the Public Internet?"
+  default     = null
+  type        = bool
+}
+
+variable "internet_query_enabled" {
+  description = "(Optional) Should the Application Insights component support querying over the Public Internet?"
+  default     = null
+  type        = bool
+}
+
+
 variable "sampling_percentage" {
   description = "(Optional) Specifies the percentage of the data produced by the monitored application that is sampled for Application Insights telemetry."
   default     = null
