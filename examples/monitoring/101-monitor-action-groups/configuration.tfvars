@@ -4,6 +4,10 @@ global_settings = {
     region1 = "australiaeast"
   }
   random_length = 5
+  inherit_tags  = true
+  tags = {
+    global1 = "global1"
+  }
 }
 
 resource_groups = {

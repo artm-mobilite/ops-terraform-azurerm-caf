@@ -10,9 +10,9 @@ resource "azurecaf_name" "this_name" {
 
 resource "azurerm_monitor_action_group" "this" {
   name                = azurecaf_name.this_name.result
-  resource_group_name = var.resource_group_name
+  resource_group_name = local.resource_group_name
   short_name          = var.settings.shortname
-  tags                = try(var.settings.tags, {})
+  tags                = local.tags
 
   dynamic "arm_role_receiver" {
     for_each = try(var.settings.arm_role_alert, {})
@@ -67,10 +67,20 @@ resource "azurerm_monitor_action_group" "this" {
     for_each = try(var.settings.event_hub_receiver, {})
     content {
       name = event_hub_receiver.value.name
-      event_hub_id = coalesce(
-        try(var.remote_objects.event_hub_namespaces[event_hub_receiver.value.event_hub.lz_key][event_hub_receiver.value.event_hub.key].id, null),
-        try(var.remote_objects.event_hub_namespaces[var.client_config.landingzone_key][event_hub_receiver.value.event_hub.key].id, null),
+      event_hub_name = coalesce(
+        try(var.remote_objects.event_hub_namespaces[event_hub_receiver.value.event_hub.lz_key][event_hub_receiver.value.event_hub.key].name, null),
+        try(var.remote_objects.event_hub_namespaces[var.client_config.landingzone_key][event_hub_receiver.value.event_hub.key].name, null),
         try(event_hub_receiver.value.event_hub.key, null)
+      )
+      event_hub_namespace = coalesce(
+        try(var.remote_objects.event_hub_namespaces[event_hub_receiver.value.event_hub.lz_key][event_hub_receiver.value.event_hub.key].namespace, null),
+        try(var.remote_objects.event_hub_namespaces[var.client_config.landingzone_key][event_hub_receiver.value.event_hub.key].namespace, null),
+        try(event_hub_receiver.value.event_hub.key, null)
+      )
+      subscription_id = coalesce(
+        try(var.settings.subscription.id, null),
+        try(var.local_combined_resources["subscriptions"][try(var.settings.subscription.lz_key, var.client_config.landingzone_key)][var.settings.subscription.key].subscription_id, null),
+        var.client_config.subscription_id
       )
       tenant_id               = try(event_hub_receiver.value.tenant_id, null)
       use_common_alert_schema = try(event_hub_receiver.value.use_common_alert_schema, null)
