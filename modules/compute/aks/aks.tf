@@ -380,7 +380,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
       service_cidr        = try(network_profile.value.service_cidr, null)
       service_cidrs       = try(network_profile.value.network_cidrs, null)
       load_balancer_sku   = try(network_profile.value.load_balancer_sku, null)
-      ebpf_data_plane     = try(network_profile.value.ebpf_data_plane, null)
       network_plugin_mode = try(network_profile.value.network_plugin_mode, null)
       ip_versions         = try(network_profile.value.ip_versions, null)
 
@@ -425,11 +424,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
       azure_rbac_enabled     = try(azure_active_directory_role_based_access_control.value.enabled, true)
       admin_group_object_ids = try(azure_active_directory_role_based_access_control.value.azure_active_directory.admin_group_object_ids, try(var.admin_group_object_ids, null))
-
-      client_app_id     = try(azure_active_directory_role_based_access_control.value.azure_active_directory.client_app_id, null)
-      server_app_id     = try(azure_active_directory_role_based_access_control.value.azure_active_directory.server_app_id, null)
-      server_app_secret = try(azure_active_directory_role_based_access_control.value.azure_active_directory.server_app_secret, null)
-
     }
   }
 
@@ -490,7 +484,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     for_each = try(var.settings.web_app_routing[*], {})
 
     content {
-      dns_zone_id = try(web_app_routing.value.dns_zone_id, null)
+      dns_zone_ids = try(web_app_routing.value.dns_zone_ids, null)
     }
   }
 
