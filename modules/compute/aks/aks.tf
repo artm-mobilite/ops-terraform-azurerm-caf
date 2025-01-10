@@ -208,7 +208,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
       subnet_name = aci_connector_linux.value.subnet_name
     }
   }
-
+  cost_analysis_enabled            = try(var.settings.cost_analysis_enabled, null)
   azure_policy_enabled             = can(var.settings.addon_profile.azure_policy) || can(var.settings.azure_policy_enabled) == false ? try(var.settings.addon_profile.azure_policy.0.enabled, null) : var.settings.azure_policy_enabled
   http_application_routing_enabled = can(var.settings.addon_profile.http_application_routing) || can(var.settings.http_application_routing_enabled) == false ? try(var.settings.addon_profile.http_application_routing.0.enabled, null) : var.settings.http_application_routing_enabled
 
@@ -407,14 +407,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
     }
   }
 
-  node_resource_group       = azurecaf_name.rg_node.result
-  oidc_issuer_enabled       = try(var.settings.oidc_issuer_enabled, null)
-  open_service_mesh_enabled = try(var.settings.open_service_mesh_enabled, null)
-  private_cluster_enabled   = try(var.settings.private_cluster_enabled, null)
-
-  private_dns_zone_id = can(var.settings.private_dns_zone_id) ? var.settings.private_dns_zone_id : var.private_dns[try(var.settings.private_dns.lz_key, var.settings.lz_key, var.client_config.landingzone_key)][try(var.settings.private_dns_key, var.settings.private_dns.key)].id
-  # private_dns_zone_id                 = try(var.private_dns_zone_id, null)
-
+  node_resource_group                 = azurecaf_name.rg_node.result
+  oidc_issuer_enabled                 = try(var.settings.oidc_issuer_enabled, null)
+  open_service_mesh_enabled           = try(var.settings.open_service_mesh_enabled, null)
+  private_cluster_enabled             = try(var.settings.private_cluster_enabled, null)
+  private_dns_zone_id                 = can(var.settings.private_dns_zone_id) ? var.settings.private_dns_zone_id : var.private_dns[try(var.settings.private_dns.lz_key, var.settings.lz_key, var.client_config.landingzone_key)][try(var.settings.private_dns_key, var.settings.private_dns.key)].id
   private_cluster_public_fqdn_enabled = try(var.settings.private_cluster_public_fqdn_enabled, null)
   public_network_access_enabled       = try(var.settings.public_network_access_enabled, true)
 

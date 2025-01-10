@@ -36,7 +36,7 @@ locals {
     object_id               = local.object_id
     subscription_id         = data.azurerm_client_config.current.subscription_id
     tenant_id               = data.azurerm_client_config.current.tenant_id
-  } : map(var.client_config)
+  } : tomap(var.client_config)
 
   cloud = merge({
     acrLoginServerEndpoint                      = try(var.cloud.acrLoginServerEndpoint, {})
@@ -198,12 +198,14 @@ locals {
     app_config                  = local.combined_objects_app_config
     azure_container_registries  = local.combined_objects_azure_container_registries
     client_config               = tomap({ (local.client_config.landingzone_key) = { config = local.client_config } })
+    cosmos_dbs                  = local.combined_objects_cosmos_dbs
     keyvaults                   = local.combined_objects_keyvaults
     machine_learning_workspaces = local.combined_objects_machine_learning
     managed_identities          = local.combined_objects_managed_identities
     mssql_databases             = local.combined_objects_mssql_databases
     mssql_servers               = local.combined_objects_mssql_servers
     maintenance_configuration   = local.combined_objects_maintenance_configuration
+    signalr_services            = local.combined_objects_signalr_services
     storage_accounts            = local.combined_objects_storage_accounts
     networking                  = local.combined_objects_networking
   }
@@ -226,8 +228,8 @@ locals {
     inherit_tags       = try(var.global_settings.inherit_tags, false)
     passthrough        = try(var.global_settings.passthrough, false)
     prefix             = try(var.global_settings.prefix, null)
-    prefix_with_hyphen = try(var.global_settings.prefix_with_hyphen, format("%s-", try(var.global_settings.prefix, try(var.global_settings.prefixes[0], random_string.prefix.0.result))))
-    prefixes           = try(var.global_settings.prefix, null) == "" ? null : try([var.global_settings.prefix], try(var.global_settings.prefixes, [random_string.prefix.0.result]))
+    prefix_with_hyphen = try(var.global_settings.prefix_with_hyphen, format("%s-", try(var.global_settings.prefix, try(var.global_settings.prefixes[0], random_string.prefix[0].result))))
+    prefixes           = try(var.global_settings.prefix, null) == "" ? null : try([var.global_settings.prefix], try(var.global_settings.prefixes, [random_string.prefix[0].result]))
     random_length      = try(var.global_settings.random_length, 0)
     regions            = try(var.global_settings.regions, null)
     tags               = try(var.global_settings.tags, null)
@@ -256,16 +258,18 @@ locals {
     maps_accounts = try(var.maps.maps_accounts, {})
   }
   messaging = {
-    signalr_services             = try(var.messaging.signalr_services, {})
-    servicebus_namespaces        = try(var.messaging.servicebus_namespaces, {})
-    servicebus_queues            = try(var.messaging.servicebus_queues, {})
-    servicebus_topics            = try(var.messaging.servicebus_topics, {})
-    eventgrid_domain             = try(var.messaging.eventgrid_domain, {})
-    eventgrid_topic              = try(var.messaging.eventgrid_topic, {})
-    eventgrid_event_subscription = try(var.messaging.eventgrid_event_subscription, {})
-    eventgrid_domain_topic       = try(var.messaging.eventgrid_domain_topic, {})
-    web_pubsubs                  = try(var.messaging.web_pubsubs, {})
-    web_pubsub_hubs              = try(var.messaging.web_pubsub_hubs, {})
+    signalr_services                    = try(var.messaging.signalr_services, {})
+    servicebus_namespaces               = try(var.messaging.servicebus_namespaces, {})
+    servicebus_queues                   = try(var.messaging.servicebus_queues, {})
+    servicebus_topics                   = try(var.messaging.servicebus_topics, {})
+    eventgrid_domain                    = try(var.messaging.eventgrid_domain, {})
+    eventgrid_topic                     = try(var.messaging.eventgrid_topic, {})
+    eventgrid_event_subscription        = try(var.messaging.eventgrid_event_subscription, {})
+    eventgrid_domain_topic              = try(var.messaging.eventgrid_domain_topic, {})
+    eventgrid_system_topic              = try(var.messaging.eventgrid_system_topic, {})
+    eventgrid_system_event_subscription = try(var.messaging.eventgrid_system_event_subscription, {})
+    web_pubsubs                         = try(var.messaging.web_pubsubs, {})
+    web_pubsub_hubs                     = try(var.messaging.web_pubsub_hubs, {})
   }
 
   networking = {
@@ -348,7 +352,7 @@ locals {
     vpn_sites                                               = try(var.networking.vpn_sites, {})
   }
 
-  object_id = coalesce(var.logged_user_objectId, var.logged_aad_app_objectId, try(data.azuread_client_config.current.object_id, null), try(data.azuread_service_principal.logged_in_app.0.object_id, null))
+  object_id = coalesce(var.logged_user_objectId, var.logged_aad_app_objectId, try(data.azuread_client_config.current.object_id, null), try(data.azuread_service_principal.logged_in_app[0].object_id, null))
 
   security = {
     disk_encryption_sets                = try(var.security.disk_encryption_sets, {})
