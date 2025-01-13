@@ -67,5 +67,10 @@ aks_clusters = {
         destination_key  = "central_logs"
       }
     }
+
+    private_cluster_enabled             = true
+    private_cluster_public_fqdn_enabled = true
+    public_network_access_enabled       = false
+    dns_prefix_private_cluster          = "akscluster-re1-001"
   }
 }
