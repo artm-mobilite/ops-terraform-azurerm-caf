@@ -37,7 +37,7 @@ output "kube_config" {
 }
 
 output "rbac_id" {
-  value = length(azurerm_kubernetes_cluster.aks.kubelet_identity) > 0 ? azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id : null
+  value = length(azurerm_kubernetes_cluster.aks.kubelet_identity) > 0 ? azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id : azurerm_kubernetes_cluster.aks.identity.principal_id
 }
 
 output "node_resource_group" {

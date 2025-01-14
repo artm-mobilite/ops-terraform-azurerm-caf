@@ -211,7 +211,7 @@ network_security_group_definition = {
 private_dns = {
   dns1 = {
     name               = "test-dns.mysite.com"
-    resource_group_key = "private_dns_region1"
+    resource_group_key = "aks_re1"
 
     records = {
       a_records = {
