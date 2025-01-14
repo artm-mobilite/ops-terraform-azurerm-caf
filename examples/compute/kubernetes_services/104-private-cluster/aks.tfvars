@@ -29,9 +29,10 @@ aks_clusters = {
       load_balancer_sku = "standard"
     }
 
-    private_cluster_enabled = true
-    enable_rbac             = true
-    outbound_type           = "userDefinedRouting"
+    private_cluster_enabled    = true
+    enable_rbac                = true
+    outbound_type              = "userDefinedRouting"
+    dns_prefix_private_cluster = "akscluster-re1-001"
 
     admin_groups = {
       # ids = []
@@ -41,6 +42,10 @@ aks_clusters = {
     load_balancer_profile = {
       # Only one option can be set
       managed_outbound_ip_count = 1
+    }
+
+    private_dns = {
+      key = "dns1"
     }
 
     private_endpoints = {

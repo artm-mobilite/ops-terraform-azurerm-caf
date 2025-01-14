@@ -91,5 +91,10 @@ aks_clusters = {
 
     node_resource_group_name = "aks-nodes-re1"
 
+    private_cluster_enabled             = true
+    private_cluster_public_fqdn_enabled = true
+    public_network_access_enabled       = false
+    dns_prefix_private_cluster          = "akscluster-re1-001"
+
   }
 }

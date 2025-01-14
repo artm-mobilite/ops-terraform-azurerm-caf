@@ -164,10 +164,10 @@ virtual_machines = {
         network_interface_keys = ["nic0"]
 
         os_disk = {
-          name                    = "example_vm1-os"
-          caching                 = "ReadWrite"
-          storage_account_type    = "Standard_LRS"
-          disk_encryption_set_key = "set1"
+          name                 = "example_vm1-os"
+          caching              = "ReadWrite"
+          storage_account_type = "Standard_LRS"
+          # disk_encryption_set_key = "set1"
         }
         identity = {
           type = "SystemAssigned"

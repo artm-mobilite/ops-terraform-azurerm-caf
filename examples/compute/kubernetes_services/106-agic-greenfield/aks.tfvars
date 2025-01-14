@@ -76,5 +76,10 @@ aks_clusters = {
       node_count            = 1
       os_disk_size_gb       = 512
     }
+
+    private_cluster_enabled             = true
+    private_cluster_public_fqdn_enabled = true
+    public_network_access_enabled       = false
+    dns_prefix_private_cluster          = "akscluster-re1-001"
   }
 }

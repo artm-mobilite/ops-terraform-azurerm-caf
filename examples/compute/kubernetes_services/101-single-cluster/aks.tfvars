@@ -18,6 +18,8 @@ aks_clusters = {
     resource_group_key = "aks_re1"
     os_type            = "Linux"
 
+    cost_analysis_enabled = true
+
     identity = {
       type = "SystemAssigned"
     }
@@ -80,5 +82,10 @@ aks_clusters = {
         secret_rotation_interval = "2m"
       }
     }
+
+    private_cluster_enabled             = true
+    private_cluster_public_fqdn_enabled = true
+    public_network_access_enabled       = false
+    dns_prefix_private_cluster          = "akscluster-re1-001"
   }
 }

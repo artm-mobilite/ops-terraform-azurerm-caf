@@ -54,20 +54,19 @@ resource "local_sensitive_file" "custom_data" {
 resource "azurerm_linux_virtual_machine" "vm" {
   for_each = local.os_type == "linux" ? var.settings.virtual_machine_settings : {}
 
-  admin_password                  = each.value.disable_password_authentication == false ? each.value.admin_password : null
-  admin_username                  = each.value.admin_username
-  allow_extension_operations      = try(each.value.allow_extension_operations, null)
-  availability_set_id             = can(each.value.availability_set_key) || can(each.value.availability_set.key) ? var.availability_sets[try(var.client_config.landingzone_key, each.value.availability_set.lz_key)][try(each.value.availability_set_key, each.value.availability_set.key)].id : try(each.value.availability_set.id, each.value.availability_set_id, null)
-  computer_name                   = data.azurecaf_name.linux_computer_name[each.key].result
-  disable_password_authentication = try(each.value.disable_password_authentication, true)
-  encryption_at_host_enabled      = try(each.value.encryption_at_host_enabled, null)
-  eviction_policy                 = try(each.value.eviction_policy, null)
-  license_type                    = try(each.value.license_type, null)
-  location                        = local.location
-  max_bid_price                   = try(each.value.max_bid_price, null)
-  name                            = data.azurecaf_name.linux[each.key].result
-  network_interface_ids           = local.nic_ids
-
+  admin_password                                         = each.value.disable_password_authentication == false ? each.value.admin_password : null
+  admin_username                                         = each.value.admin_username
+  allow_extension_operations                             = try(each.value.allow_extension_operations, null)
+  availability_set_id                                    = can(each.value.availability_set_key) || can(each.value.availability_set.key) ? var.availability_sets[try(var.client_config.landingzone_key, each.value.availability_set.lz_key)][try(each.value.availability_set_key, each.value.availability_set.key)].id : try(each.value.availability_set.id, each.value.availability_set_id, null)
+  computer_name                                          = data.azurecaf_name.linux_computer_name[each.key].result
+  disable_password_authentication                        = try(each.value.disable_password_authentication, true)
+  encryption_at_host_enabled                             = try(each.value.encryption_at_host_enabled, null)
+  eviction_policy                                        = try(each.value.eviction_policy, null)
+  license_type                                           = try(each.value.license_type, null)
+  location                                               = local.location
+  max_bid_price                                          = try(each.value.max_bid_price, null)
+  name                                                   = data.azurecaf_name.linux[each.key].result
+  network_interface_ids                                  = local.nic_ids
   bypass_platform_safety_checks_on_user_schedule_enabled = try(each.value.bypass_platform_safety_checks_on_user_schedule_enabled, null)
   # (Optional) Specifies the mode of in-guest patching to this Linux Virtual Machine. Possible values are AutomaticByPlatform and ImageDefault. Defaults to ImageDefault. For more information on patch modes please see the product documentation.
   patch_mode                   = try(each.value.patch_mode, "ImageDefault")

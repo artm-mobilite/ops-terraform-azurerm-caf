@@ -208,7 +208,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
       subnet_name = aci_connector_linux.value.subnet_name
     }
   }
-
+  cost_analysis_enabled            = try(var.settings.cost_analysis_enabled, null)
   azure_policy_enabled             = can(var.settings.addon_profile.azure_policy) || can(var.settings.azure_policy_enabled) == false ? try(var.settings.addon_profile.azure_policy.0.enabled, null) : var.settings.azure_policy_enabled
   http_application_routing_enabled = can(var.settings.addon_profile.http_application_routing) || can(var.settings.http_application_routing_enabled) == false ? try(var.settings.addon_profile.http_application_routing.0.enabled, null) : var.settings.http_application_routing_enabled
 
@@ -380,7 +380,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
       service_cidr        = try(network_profile.value.service_cidr, null)
       service_cidrs       = try(network_profile.value.network_cidrs, null)
       load_balancer_sku   = try(network_profile.value.load_balancer_sku, null)
-      ebpf_data_plane     = try(network_profile.value.ebpf_data_plane, null)
       network_plugin_mode = try(network_profile.value.network_plugin_mode, null)
       ip_versions         = try(network_profile.value.ip_versions, null)
 
@@ -407,14 +406,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
     }
   }
 
-  node_resource_group       = azurecaf_name.rg_node.result
-  oidc_issuer_enabled       = try(var.settings.oidc_issuer_enabled, null)
-  open_service_mesh_enabled = try(var.settings.open_service_mesh_enabled, null)
-  private_cluster_enabled   = try(var.settings.private_cluster_enabled, null)
-
-  private_dns_zone_id = can(var.settings.private_dns_zone_id) ? var.settings.private_dns_zone_id : var.private_dns[try(var.settings.private_dns.lz_key, var.settings.lz_key, var.client_config.landingzone_key)][try(var.settings.private_dns_key, var.settings.private_dns.key)].id
-  # private_dns_zone_id                 = try(var.private_dns_zone_id, null)
-
+  node_resource_group                 = azurecaf_name.rg_node.result
+  oidc_issuer_enabled                 = try(var.settings.oidc_issuer_enabled, null)
+  open_service_mesh_enabled           = try(var.settings.open_service_mesh_enabled, null)
+  private_cluster_enabled             = try(var.settings.private_cluster_enabled, null)
+  private_dns_zone_id                 = can(var.settings.private_dns_zone_id) ? var.settings.private_dns_zone_id : try(var.private_dns[try(var.settings.private_dns.lz_key, var.settings.lz_key, var.client_config.landingzone_key)][try(var.settings.private_dns_key, var.settings.private_dns.key)].id, null)
   private_cluster_public_fqdn_enabled = try(var.settings.private_cluster_public_fqdn_enabled, null)
   public_network_access_enabled       = try(var.settings.public_network_access_enabled, true)
 
@@ -428,11 +424,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
       azure_rbac_enabled     = try(azure_active_directory_role_based_access_control.value.enabled, true)
       admin_group_object_ids = try(azure_active_directory_role_based_access_control.value.azure_active_directory.admin_group_object_ids, try(var.admin_group_object_ids, null))
-
-      client_app_id     = try(azure_active_directory_role_based_access_control.value.azure_active_directory.client_app_id, null)
-      server_app_id     = try(azure_active_directory_role_based_access_control.value.azure_active_directory.server_app_id, null)
-      server_app_secret = try(azure_active_directory_role_based_access_control.value.azure_active_directory.server_app_secret, null)
-
     }
   }
 
@@ -493,7 +484,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     for_each = try(var.settings.web_app_routing[*], {})
 
     content {
-      dns_zone_id = try(web_app_routing.value.dns_zone_id, null)
+      dns_zone_ids = try(web_app_routing.value.dns_zone_ids, null)
     }
   }
 
