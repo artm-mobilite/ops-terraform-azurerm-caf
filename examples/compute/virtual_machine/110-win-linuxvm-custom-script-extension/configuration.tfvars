@@ -50,7 +50,7 @@ storage_account_blobs = {
     name                   = "helloworld.sh"
     storage_account_key    = "sa1"
     storage_container_name = "files"
-    source                 = "compute/virtual_machine/110-win-linuxvm-custom-script-extension/scripts/scripts/helloworld.sh"
+    source                 = "compute/virtual_machine/110-win-linuxvm-custom-script-extension/scripts/helloworld.sh"
     parallelism            = 1
   }
   script2 = {
